@@ -17,7 +17,11 @@ const TweetFeed = (props) => {
     retweetFrom,
     timestamp,
     status,
+    isRetweeted,
+    numRetweets,
   } = props.tweet;
+
+  console.log("retweeted from: ", props.tweet);
 
   const history = useHistory();
 
@@ -67,7 +71,6 @@ const TweetFeed = (props) => {
                 {" "}
                 @{author.handle} - {formatDate(timestamp)}
               </TweetDisplayName>
-              {/* <TweetTimeStamp> {formatDate(timestamp)}</TweetTimeStamp> */}
             </TweetHandleDisplayNameTimeStamp>
             <TweetStatus
               onClick={() => {
@@ -84,6 +87,7 @@ const TweetFeed = (props) => {
             </TweetIcon>
             <TweetIcon>
               <TweetIconRepeat tabIndex="0" />
+              {numRetweets > 0 ? numRetweets : ""}
             </TweetIcon>
             <TweetIcon>
               <TweetIconHeart tabIndex="0" />

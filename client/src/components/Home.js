@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import SideBar from "./Sidebar";
 import styled from "styled-components";
 import { CurrentUserContext } from "./CurrentUserContext";
-import BigTweet from "./BigTweet";
+
 import TweetFeed from "./TweetFeed";
 
 const Home = () => {
