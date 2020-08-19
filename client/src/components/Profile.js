@@ -1,10 +1,12 @@
 import React from "react";
 import { CurrentUserContext } from "./CurrentUserContext";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import SideBar from "./Sidebar";
 import { useParams } from "react-router-dom";
 import { FiCalendar, FiMapPin } from "react-icons/fi";
 import TweetFeed from "./TweetFeed";
+import { spinner10 } from "react-icons-kit/icomoon/spinner10";
+import { Icon } from "react-icons-kit";
 
 const Profile = () => {
   let { profileId } = useParams();
@@ -117,6 +119,33 @@ const Profile = () => {
     </>
   );
 };
+
+const spin = keyframes`
+0% {
+  transform: rotate( 0deg );
+}
+10% {
+  transform: rotate( 15deg );
+}
+50% {
+  transform: rotate( -180deg );
+}
+100% {
+  transform: rotate( -360deg );
+}
+`;
+
+const Spinner = styled(Icon)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  display: block;
+  animation: ${spin} 1s infinite;
+  svg {
+    display: block !important;
+  }
+`;
 
 const FollowerStatement = styled.span`
   background-color: #dcdcdc;

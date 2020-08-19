@@ -7,6 +7,7 @@ export const CurrentUserProvider = ({ children }) => {
   const [homeFeed, setHomeFeed] = React.useState(null);
   const [toggleHomeFeed, setToggleHomeFeed] = React.useState(false);
   const [status, setStatus] = React.useState("loading");
+  const [likeTweet, setLikeTweet] = React.useState(false);
 
   React.useEffect(() => {
     fetch("/api/me/profile")
@@ -32,16 +33,19 @@ export const CurrentUserProvider = ({ children }) => {
     tweets = homeFeed.tweetIds.map((tweetID) => {
       return homeFeed.tweetsById[tweetID];
     });
-    console.log("tweets in HomeFeed: ", tweets);
   }
-
-  console.log("in homefeed");
-
-  console.log("in current  user context");
 
   return (
     <CurrentUserContext.Provider
-      value={{ currentUser, status, tweets, toggleHomeFeed, setToggleHomeFeed }}
+      value={{
+        currentUser,
+        status,
+        tweets,
+        toggleHomeFeed,
+        setToggleHomeFeed,
+        likeTweet,
+        setLikeTweet,
+      }}
     >
       {children}
     </CurrentUserContext.Provider>

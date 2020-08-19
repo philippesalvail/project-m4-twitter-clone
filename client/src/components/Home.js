@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import SideBar from "./Sidebar";
-import styled from "styled-components";
 import { CurrentUserContext } from "./CurrentUserContext";
+import styled, { css, keyframes } from "styled-components";
+import { spinner10 } from "react-icons-kit/icomoon/spinner10";
+import { Icon } from "react-icons-kit";
 
 import TweetFeed from "./TweetFeed";
 
@@ -20,7 +22,7 @@ const Home = () => {
   const CHARACTER_MAX = 280;
 
   const messageCount = (e) => {
-    e.target.value.length == 0 || e.target.value.length > CHARACTER_MAX
+    e.target.value.length === 0 || e.target.value.length > CHARACTER_MAX
       ? setbtnOpacity(0.5)
       : setbtnOpacity(1);
 
@@ -111,13 +113,41 @@ const Home = () => {
           </TweetPostings>
         </HomePage>
       ) : (
-        <></>
+        <>
+          <Spinner icon={spinner10} />
+        </>
       )}
     </>
   );
 };
 export default Home;
 
+const spin = keyframes`
+0% {
+  transform: rotate( 0deg );
+}
+10% {
+  transform: rotate( 15deg );
+}
+50% {
+  transform: rotate( -180deg );
+}
+100% {
+  transform: rotate( -360deg );
+}
+`;
+
+const Spinner = styled(Icon)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  display: block;
+  animation: ${spin} 1s infinite;
+  svg {
+    display: block !important;
+  }
+`;
 const TweetForm = styled.form``;
 
 const TweetMessage = styled.div`

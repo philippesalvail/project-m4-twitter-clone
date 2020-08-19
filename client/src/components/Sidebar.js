@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { FiHome, FiUser, FiBookmark } from "react-icons/fi";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { ReactComponent as CatLogo } from "../assets/logo.svg";
@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import { COLORS } from "../constants";
 import { CurrentUserContext } from "./CurrentUserContext";
 import { useHistory } from "react-router-dom";
+import { spinner10 } from "react-icons-kit/icomoon/spinner10";
 
 function SideBar() {
   const { currentUser, status } = React.useContext(CurrentUserContext);
@@ -18,7 +19,7 @@ function SideBar() {
   };
 
   return (
-    <>
+    <Top>
       {status === "idol" ? (
         <TweetSideBar>
           <TweetViewNavigator>
@@ -56,11 +57,45 @@ function SideBar() {
           </TweetViewNavigator>
         </TweetSideBar>
       ) : (
-        <>{status}</>
+        <>
+          <Spinner icon={spinner10} />
+        </>
       )}
-    </>
+    </Top>
   );
 }
+
+const Top = styled.div`
+  postion: relative;
+`;
+
+const spin = keyframes`
+0% {
+  transform: rotate( 0deg );
+}
+10% {
+  transform: rotate( 15deg );
+}
+50% {
+  transform: rotate( -180deg );
+}
+100% {
+  transform: rotate( -360deg );
+}
+`;
+const animation = () =>
+  css`
+    ${spin} 2s infinite;
+  `;
+const Spinner = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  animation: ${animation};
+`;
 
 const PaddedSpan = styled.span`
   padding: 5%;

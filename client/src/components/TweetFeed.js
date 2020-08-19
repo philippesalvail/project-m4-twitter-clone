@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { FiHeart, FiUpload, FiMessageCircle, FiRepeat } from "react-icons/fi";
 import { useHistory } from "react-router-dom";
+import { CurrentUserContext } from "./CurrentUserContext";
 
 const formatDate = (timestamp) => {
   var options = { year: "numeric", month: "long", day: "numeric" };
@@ -12,14 +13,22 @@ const TweetFeed = (props) => {
   const {
     author,
     id,
-    isLiked,
     media,
     retweetFrom,
     timestamp,
     status,
-    isRetweeted,
     numRetweets,
+    numLikes,
   } = props.tweet;
+
+  const {
+    likeTweet,
+    setLikeTweet,
+    toggleHomeFeed,
+    setToggleHomeFeed,
+  } = React.useContext(CurrentUserContext);
+
+  React.useEffect(() => {}, [likeTweet]);
 
   console.log("retweeted from: ", props.tweet);
 
@@ -34,7 +43,7 @@ const TweetFeed = (props) => {
   };
 
   const handleKeyEvent = (ev) => {
-    if (ev.key == "Enter") {
+    if (ev.key === "Enter") {
       history.push(`/${author.handle}`);
     }
   };
@@ -43,6 +52,19 @@ const TweetFeed = (props) => {
   for (const element of media) {
     mediaURL = element.url;
   }
+
+  const changeLikeStatus = async (id) => {
+    let response = await fetch(`/api/tweet/${id}/like`, {
+      method: "PUT",
+      body: JSON.stringify({ like: !likeTweet }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    setLikeTweet(!likeTweet);
+    setToggleHomeFeed(!toggleHomeFeed);
+  };
 
   return (
     <TweetPost>
@@ -90,7 +112,14 @@ const TweetFeed = (props) => {
               {numRetweets > 0 ? numRetweets : ""}
             </TweetIcon>
             <TweetIcon>
-              <TweetIconHeart tabIndex="0" />
+              <TweetIconHeart
+                tabIndex="0"
+                color={numLikes ? "red" : ""}
+                onClick={() => {
+                  changeLikeStatus(id);
+                }}
+              />
+              <TweetLike>{numLikes ? numLikes : ""}</TweetLike>
             </TweetIcon>
             <TweetIcon>
               <TweetIconUpload tabIndex="0" />
@@ -101,6 +130,12 @@ const TweetFeed = (props) => {
     </TweetPost>
   );
 };
+const TweetLike = styled.span`
+  top: -1px;
+  left: 4px;
+  position: absolute;
+  left: 15%;
+`;
 const TweetInstance = styled.div`
   display: flex;
 `;
@@ -138,7 +173,7 @@ const Tweethandle = styled.span`
   font-weight: bold;
 `;
 const TweetDisplayName = styled.div``;
-const TweetTimeStamp = styled.div``;
+
 const TweetStatus = styled.div`
   display: flex;
 `;
@@ -153,6 +188,7 @@ const TweetBlogImage = styled.img`
 const TweetIcon = styled.div`
   flex: 1;
   text-align: left;
+  position: relative;
 `;
 
 const TweetIcons = styled.div`
@@ -167,6 +203,7 @@ const TweetIconRepeat = styled(FiRepeat)`
 `;
 const TweetIconHeart = styled(FiHeart)`
   flex: 1;
+  color: ${(props) => props.color};
 `;
 const TweetIconUpload = styled(FiUpload)`
   flex: 1;
